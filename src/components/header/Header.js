@@ -18,13 +18,8 @@ class Header extends Component {
 
   findGif = e => {
     e.preventDefault();
-    debugger;
-    if(this.state.value === ""){
-        //this.props.setAlert('Please Enter Username', 'light');
-    } else {
-        this.props.searchGIF(this.state.value);
-        this.setState({value: ''});
-    }
+      this.props.searchGIF(this.state.value);
+      this.setState({value: ''});
   }
 
   onChange = e => this.setState({ [e.target.name]: e.target.value });

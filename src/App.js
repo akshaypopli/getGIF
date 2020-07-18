@@ -8,20 +8,25 @@ class App extends Component {
   state={
     gifs: [],   
     displaySearchResultTag: false, 
+    resultFor: "",
     alert: null
   }
 
   // fetch some users initially
   async componentDidMount(){
-    this.setState({displaySearchResultTag: false});
+    this.setState({displaySearchResultTag: false, resultFor: ""});
     const res = await axios.get(`https://api.giphy.com/v1/gifs/trending?&api_key=S9vhQ0DK5QKKsheiEkKmJuSp9vMuxhCc`);
     this.setState({gifs: res.data.data});
   }
 
   findGif = async text => {
-    this.setState({displaySearchResultTag: true});
-    const res = await axios.get(`https://api.giphy.com/v1/gifs/search?q=${text}&api_key=S9vhQ0DK5QKKsheiEkKmJuSp9vMuxhCc`);
-    this.setState({gifs: res.data.data});
+    if(text!==""){
+      this.setState({displaySearchResultTag: true, resultFor: text});
+      const res = await axios.get(`https://api.giphy.com/v1/gifs/search?q=${text}&api_key=S9vhQ0DK5QKKsheiEkKmJuSp9vMuxhCc`);
+      this.setState({gifs: res.data.data});
+    } else {
+      this.componentDidMount();
+    }
   }
 
   render(){
@@ -29,7 +34,7 @@ class App extends Component {
       <div className="App">
         <Header searchGIF={this.findGif} />
 
-        {this.state.displaySearchResultTag? <h2 className='container'>Your Search Results:</h2>: null}
+    {this.state.displaySearchResultTag? <h2 className='container'>Your Search Results: {this.state.resultFor}</h2>: null}
         <Gifs gifs={this.state.gifs} searchGIF={this.findGif}/>
       </div>
     );
